@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./App.css"; 
 
-const BACKEND_URL = "http://backend_device_ip:5000"; // Replace with actual backend IP
+const BACKEND_URL = "http://backend_device_ip:5000"; // replace with backend ip
 
 const Home = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({ title: "", description: "" });
-  const [showTasks, setShowTasks] = useState(false); // Toggle for viewing tasks
+  const [showTasks, setShowTasks] = useState(false); 
 
   useEffect(() => {
     fetch(`${BACKEND_URL}/tasks`)
