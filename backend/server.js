@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const cors = require("cors");
 
 const app = express();
@@ -35,13 +35,25 @@ app.get("/tasks", (req, res) => {
 
 
 app.post("/tasks", (req, res) => {
-    const { title, description } = req.body;
-    db.query("INSERT INTO tasks (title, description) VALUES (?, ?)", [title, description], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: err });
-        }
-        res.json({ id: results.insertId, title, description });
-    });
+  const { title, description } = req.body; // Ensure 'des' is used
+
+  console.log("Received a POST request to /tasks");
+  console.log("Request Body:", req.body);
+
+  if (!title || !description) {
+    console.log("Missing title or description");
+    return res.status(400).json({ error: "Title and description are required" });
+  }
+
+  const query = "INSERT INTO tasks (title, description) VALUES (?, ?)"; 
+  db.query(query, [title, description], (err, result) => {
+    if (err) {
+      console.error("Database Insert Error:", err);
+      return res.status(500).json({ error: "Failed to add task" });
+    }
+    console.log("Task successfully inserted:", { id: result.insertId, title, description });
+    res.json({ id: result.insertId, title, description });
+  });
 });
 
 
